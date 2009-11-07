@@ -35,12 +35,18 @@ sub index :Path :Args(1) {
 #    $c->response->headers->last_modified( $stat->mtime );
     $c->response->headers->header('Content-disposition:' => qq[attachment; filename="$filename"] );
     $c->response->headers->expires( time() );
-    $c->response->headers->header( 'Last-Modified' => HTTP::Date::time2str);
+#    $c->response->headers->header( 'Last-Modified' => HTTP::Date::time2str);
     $c->response->headers->header( 'Pragma'        => 'no-cache' );
     $c->response->headers->header( 'Cache-Control' => 'no-cache' );
 
     open my $fh, '<', $fullpath or die("Cannot open $fullpath for reading");
-    $c->response->body( $fh );
+    while(1) {
+        my $data;
+        my $read = read($fh, $data, 65536);
+        die($!) unless(defined($read));
+        last unless($read);
+        $c->response->write( $data );
+    }
     close($fh);
 }
 
