@@ -84,6 +84,9 @@ YAHOO.util.Event.onDOMReady(function () {
 		var indicator_data = this.getData();
 		var sArgs = new String();
 
+        var tf = indicator_data['timeframe'];
+        delete indicator_data['timeframe'];
+
 		sArgs += parseIndicators(indicator_data['o'],"o");
 		delete indicator_data['o'];
 
@@ -97,9 +100,10 @@ YAHOO.util.Event.onDOMReady(function () {
 		}
 
 		sArgs += "&cc=" + (size-1);
+		sArgs += "&t=" + tf;
 
 		var c = charts['chart1'];
-		c.reloadSettings("/chart/settings?t=[% timeframe | uri %]&s=[% symbol | uri %]" + sArgs);
+		c.reloadSettings("/chart/settings?s=[% symbol | uri %]" + sArgs);
 		this.cancel();
 	};
 
@@ -139,13 +143,19 @@ YAHOO.util.Event.onDOMReady(function () {
 <div class="hd">Chart Settings</div>
 <div class="bd">
 <form method="POST" action="">
+<select name="timeframe">
+<option value="hour">Hourly</option>
+<option selected value="day">Daily</option>
+<option value="week">Weekly</option>
+</select>
 <fieldset>
 <legend>Signals</legend>
-	<textarea name="signals"></textarea>
+	<textarea name="signals">crossoverup(ema(close,50), ema(close,200))</textarea>
 </fieldset>
 <fieldset>
 <legend>Overlays</legend>
-	<textarea name="o"></textarea>
+	<textarea name="o">ema(close,50)
+ema(close,200)</textarea>
 </fieldset>
 </form>
 </div>
