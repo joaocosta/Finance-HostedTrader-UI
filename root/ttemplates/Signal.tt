@@ -1,0 +1,143 @@
+<div>
+<style type="text/css">
+.yui-pe .yui-pe-content {
+	display:none;
+}
+
+.bd textarea {
+	width: 100%
+}
+</style>
+
+  <script type="text/javascript" src="[% c.config.static_dir %]/swfobject.js"></script>
+<div>
+<button id="chart_settings">Chart Settings</button>
+</div>
+        <div id="flashcontent">
+                <strong>You need to upgrade your Flash Player</strong>
+        </div>
+
+        <script type="text/javascript">
+                // <![CDATA[
+var charts = new Object();
+function amChartInited(chart_id) {
+	charts[chart_id] = document.getElementById(chart_id);
+}
+                var so = new SWFObject("[% c.config.static_dir %]/amstock.swf", "chart1", "950", "620", "8", "#FFFFFF");
+		so.addParam("wmode","transparent");
+		so.addVariable("chart_id", "chart1");
+                so.addVariable("path", "/chart/");
+                so.addVariable("settings_file", escape("/chart/settings?t=[% timeframe | uri %]&s=[% symbol | uri %]&[% chart_args %]"));
+                so.addVariable("preloader_color", "#999999");
+                so.write("flashcontent");
+document.documentElement.className = "yui-pe";
+                // ]]>
+        </script>
+
+        <script type="text/javascript">
+                // <![CDATA[
+YAHOO.namespace("hostedtrader.container");
+
+YAHOO.util.Event.onDOMReady(function () {
+
+	var parseIndicators = function(msg,sUriVar) {
+		var txt = new String(msg);
+		var indicators = txt.split("\n");
+
+		var sArgs = new String();
+		for (i in indicators) {
+			sArgs += "&" + sUriVar + "=" + encodeURIComponent(indicators[i]);
+		}
+		return sArgs;
+	}
+
+	var removeTxt = function() {
+		this.form.removeChild(this.parentNode);
+	}
+
+	var handleAdd = function() {
+		var txt = document.createElement("textarea");
+		var r = Math.ceil(Math.random()*10000);
+		var d = new Date();
+		txt.name="i"+(d.getTime() + "" + r);
+		YAHOO.util.Event.addListener(txt, "dblclick", removeTxt);
+		var fldSet = document.createElement("fieldset");
+		var legend = document.createElement("legend");
+		legend.innerHTML = 'Additional zone';
+		fldSet.appendChild(legend);
+		fldSet.appendChild(txt);
+		this.form.appendChild(fldSet);
+	}
+
+	var reload_chart = function() {
+		var indicator_data = this.getData();
+		var sArgs = new String();
+
+		sArgs += parseIndicators(indicator_data['o'],"o");
+		delete indicator_data['o'];
+
+		sArgs += parseIndicators(indicator_data['signals'],"sig");
+		delete indicator_data['signals'];
+
+		var size = 1;
+		for (var key in indicator_data) {
+			sArgs += parseIndicators(indicator_data[key],"i" + size);
+			size++;
+		}
+
+		sArgs += "&cc=" + (size-1);
+
+		var c = charts['chart1'];
+		c.reloadSettings("/chart/settings?t=[% timeframe | uri %]&s=[% symbol | uri %]" + sArgs);
+		this.cancel();
+	};
+
+	var handleCancel = function() {
+		this.cancel();
+	};
+
+    // Remove progressively enhanced content class, just before creating the module
+    YAHOO.util.Dom.removeClass("dlg_indicators", "yui-pe-content");
+
+	YAHOO.hostedtrader.container.dlg_indicators = new YAHOO.widget.Dialog("dlg_indicators",
+							{ width : "50em",
+							  fixedcenter : false,
+							  visible : true,
+							  constraintoviewport : true,
+							  buttons : [
+								{ text:"Add Panel", handler:handleAdd}, 
+								{ text:"Apply", handler:reload_chart, isDefault:true },
+								{ text:"Cancel", handler:handleCancel } ]
+							});
+
+	YAHOO.hostedtrader.container.dlg_indicators.validate = function() {
+		var data = this.getData();
+		return true;
+	};
+
+	// Render the Dialog
+	YAHOO.hostedtrader.container.dlg_indicators.render();
+	YAHOO.util.Event.addListener("chart_settings", "click", YAHOO.hostedtrader.container.dlg_indicators.show, YAHOO.hostedtrader.container.dlg_indicators, true);
+
+});
+
+                // ]]>
+</script>
+
+<div id="dlg_indicators" class="yui-pe-content">
+<div class="hd">Chart Settings</div>
+<div class="bd">
+<form method="POST" action="">
+<fieldset>
+<legend>Signals</legend>
+	<textarea name="signals"></textarea>
+</fieldset>
+<fieldset>
+<legend>Overlays</legend>
+	<textarea name="o"></textarea>
+</fieldset>
+</form>
+</div>
+</div>
+
+</div>

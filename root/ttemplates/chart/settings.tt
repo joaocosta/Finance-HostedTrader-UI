@@ -1,0 +1,220 @@
+<settings>
+  <margins>3</margins>
+  <font>Verdana</font>
+  <text_size>13</text_size>
+  <text_color>#000000</text_color>
+  <redraw>true</redraw>
+  <max_series>0</max_series>
+  <equal_spacing>true</equal_spacing>
+  <legend_position>right</legend_position>
+  <legend_width>150</legend_width>
+  <number_format>
+    <decimal_separator>.</decimal_separator>
+  </number_format>
+  <data_sets>
+    <data_set did='0'>
+      <title>[% symbol | xml %] - [% timeframe | xml %]</title>
+      <short></short>
+      <file_name><![CDATA[data?s=[% symbol |uri %]&t=[% timeframe %]
+[%- FOREACH item IN overlays -%]
+&i=[% item | uri %]
+[%- END -%]
+[%- FOREACH item IN charts -%]
+[%- FOREACH i IN item -%]
+&i=[% i | uri %]
+[%- END -%]
+[%- END -%]
+]]></file_name>
+      <csv>
+        <reverse>false</reverse>
+        <separator>,</separator>
+        <date_format>YYYY-MM-DD</date_format>
+        <decimal_separator>.</decimal_separator>
+        <columns>
+          <column>date</column>
+          <column>open</column>
+          <column>high</column>
+          <column>low</column>
+          <column>close</column>
+[% FOREACH data_item IN overlays -%]
+          <column>ds[% loop.count %]</column>
+[% END -%]
+[% COUNTER=overlays.size+1 %]
+[%- FOREACH item IN charts -%]
+[%- FOREACH i IN item -%]
+          <column>ds[% COUNTER %]</column>
+[% COUNTER = COUNTER + 1 -%]
+[% END -%]
+[% END -%]
+        </columns>
+      </csv>
+      <events>
+[% FOREACH event IN events -%]
+[% FOREACH date IN event.dates -%]
+        <event>
+          <date>[% date %]</date>
+          <letter>[% event.key | xml %]</letter>
+          <description>[% event.desc | xml %]</description>
+        </event>
+[% END -%]
+[% END -%]
+      </events>
+    </data_set>
+  </data_sets>
+  <charts>
+    <chart cid='0'>
+      <height>60</height>
+      <title>Value</title>
+      <border_color>#CCCCCC</border_color>
+      <border_alpha>100</border_alpha>
+      <legend>
+        <enabled>1</enabled>
+        <show_date>1</show_date>
+        <hide_date_on_period>0</hide_date_on_period>
+        <key_type>line</key_type>
+        <graph_on_off>1</graph_on_off>
+      </legend>
+      <events>
+        <use_hand_cursor>true</use_hand_cursor>
+        <bullet>pin</bullet>
+      </events>
+      <column_width>100</column_width>
+      <graphs>
+        <graph gid='0'>
+          <type>candlestick</type>
+          <connect>false</connect>
+          <data_sources>
+            <open>open</open>
+            <close>close</close>
+            <low>low</low>
+            <high>high</high>
+          </data_sources>
+          <title>Price</title>
+          <width>1</width>
+          <legend>
+            <date key='1' title='0'>
+              <![CDATA[{close}]]>
+            </date>
+            <period key='1' title='0'>
+              <![CDATA[O:<b>{open}</b><br/> L:<b>{low}</b> <br/>H:<b>{high}</b> <br/>C:<b>{close}</b>]]>
+            </period>
+          </legend>
+        </graph>
+[% FOREACH item IN overlays %]
+<graph gid='[% loop.count %]'>
+<type>line</type>
+<connect>false</connect>
+<data_sources><close>ds[% loop.count %]</close></data_sources>
+<color>00BB00</color>
+<title>Line [% loop.count %]</title>
+<width>1</width>
+<legend><date key='1' title='0'><![CDATA[{close}]]></date></legend>
+</graph>
+[% END %]
+      </graphs>
+    </chart>
+[% COUNTER=overlays.size+1 %]
+[% FOREACH item IN charts %]
+<chart cid='[% loop.count %]'>
+    <height>30</height>
+    <title>Indicator [% loop.count %]</title>
+    <border_color>#CCCCCC</border_color>
+    <border_alpha>100</border_alpha>
+    <legend>
+        <enabled>1</enabled>
+        <show_date>0</show_date>
+        <hide_date_on_period>0</hide_date_on_period>
+        <key_type>line</key_type>
+        <graph_on_off>1</graph_on_off>
+    </legend>
+    <events>
+        <use_hand_cursor>true</use_hand_cursor>
+        <bullet>pin</bullet>
+    </events>
+    <column_width>100</column_width>
+    <graphs>
+[% FOREACH i IN item -%]
+        <graph gid='[% COUNTER %]'>
+            <type>line</type>
+            <connect>false</connect>
+            <data_sources>
+                <close>ds[% COUNTER %]</close>
+            </data_sources>
+            <title>Indicator [% loop.count %]</title>
+            <width>1</width>
+            <legend>
+                <date key='1' title='0'><![CDATA[{close}]]></date>
+            </legend>
+        </graph>
+[% COUNTER = COUNTER + 1 -%]
+[% END -%]
+    </graphs>
+</chart>
+[% END %]
+  </charts>
+  <data_set_selector>
+    <enabled>0</enabled>
+  </data_set_selector>
+  <period_selector>
+    <enabled>1</enabled>
+    <custom_period_enabled>0</custom_period_enabled>
+    <periods>
+      <period type='MM' count='1'>1M</period>
+      <period type='MM' count='3'>3M</period>
+      <period type='MM' count='6'>6M</period>
+      <period selected='1' type='YYYY' count='1'>1Y</period>
+      <period type='YYYY' count='3'>3Y</period>
+      <period type='YTD' count='0'>YTD</period>
+      <period type='MAX'>MAX</period>
+    </periods>
+    <periods_title>Zoom:</periods_title>
+  </period_selector>
+  <header>
+    <enabled>true</enabled>
+    <text>
+      <![CDATA[<b>{title}</b> {description}]]>
+    </text>
+    <text_size>12</text_size>
+  </header>
+  <scroller>
+    <enabled>true</enabled>
+    <graph_data_source>close</graph_data_source>
+    <graph_type>step</graph_type>
+    <playback>
+      <enabled>true</enabled>
+      <color></color>
+      <color_hover></color_hover>
+      <speed>3</speed>
+      <max_speed>10</max_speed>
+      <loop>false</loop>
+      <speed_indicator>
+        <enabled>true</enabled>
+      </speed_indicator>
+    </playback>
+  </scroller>
+  <strings>
+    <months>
+      <jan>Jan</jan>
+      <feb>Feb</feb>
+      <mar>Mar</mar>
+      <apr>Apr</apr>
+      <may>May</may>
+      <jun>Jun</jun>
+      <jul>Jul</jul>
+      <aug>Aug</aug>
+      <sep>Sep</sep>
+      <oct>Oct</oct>
+      <nov>Nov</nov>
+      <dec>Dec</dec>
+    </months>
+    <weekdays>
+      <sun>Sun</sun>
+      <mon>Mon</mon>
+      <tue>Tue</tue>
+      <wed>Wed</wed>
+      <thu>Thu</thu>
+      <fri>Fri</fri>
+      <sat>Sat</sat>
+    </weekdays>
+  </strings>
+</settings>

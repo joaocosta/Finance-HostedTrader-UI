@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<title>[% symbol | html %] Forex Historical Data</title>
+<meta name="Keywords" content="forex,daily,intraday,data,historical,audjpy,audusd,chfjpy,euraud,eurchf,eurgbp,eurjpy,eurusd,gbpchf,gbpjpy,gbpusd,nzdusd,usdcad,usdchf,usdjpy" />
+<meta name="Description" content="Daily and Intraday Historical Data for foreign exchange currency pairs plus gold and silver commodities, dating back to 2001" />
+
+
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="[% c.config.static_dir %]/s.css" />
+
+<link rel="stylesheet" type="text/css" href="[% c.config.yui_dir %]/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="[% c.config.yui_dir %]/button/assets/skins/sam/button.css" />
+<link rel="stylesheet" type="text/css" href="[% c.config.yui_dir %]/container/assets/skins/sam/container.css" />
+<script type="text/javascript" src="[% c.config.yui_dir %]/yahoo-dom-event/yahoo-dom-event.js"></script>
+
+<script type="text/javascript" src="[% c.config.yui_dir %]/connection/connection-min.js"></script>
+<script type="text/javascript" src="[% c.config.yui_dir %]/element/element-min.js"></script>
+<script type="text/javascript" src="[% c.config.yui_dir %]/button/button-min.js"></script>
+<script type="text/javascript" src="[% c.config.yui_dir %]/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="[% c.config.yui_dir %]/container/container-min.js"></script>
+<script type="text/javascript" src="[% c.config.yui_dir %]/json/json-min.js"></script>
+
+
+
+</head>
+
+<body class="yui-skin-sam">
+<div id="Header"><a href="/" title="FXHistoricalData Home">FXHISTORICALDATA.COM</a></div>
+
+<div id="Content">
+[% content %]
+</div>
+
+<!--script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+<script type="text/javascript">
+_uacct = "UA-2012395-1";
+urchinTracker();
+</script-->
+
+</body>
+</html>
