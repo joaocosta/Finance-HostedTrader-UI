@@ -34,9 +34,8 @@ body {
 <script type="text/javascript" src="[% c.config.yui_dir %]/dragdrop/dragdrop-min.js"></script>
 <script type="text/javascript" src="[% c.config.yui_dir %]/container/container-min.js"></script>
 <script type="text/javascript" src="[% c.config.yui_dir %]/json/json-min.js"></script>
-
-
-
+<script type="text/javascript" src="[% c.config.yui_dir %]/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="[% c.config.yui_dir %]/datatable/datatable-min.js"></script>
 </head>
 
 <body class="yui-skin-sam">
