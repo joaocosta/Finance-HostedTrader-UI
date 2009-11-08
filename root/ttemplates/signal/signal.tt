@@ -4,14 +4,14 @@
 </div>
 
 
-<div id="json"></div> 
+<div id="json"></div>
 <script>
 YAHOO.util.Event.addListener(window, "load", function() {
     YAHOO.example.XHR_JSON = new function() {
 
         this.formatUrl = function(elCell, oRecord, oColumn, sData) {
-	        elCell.innerHTML = "<a href='/" + oRecord.getData("symbol") + "/'>" + sData + "</a>"; 
-	    }; 
+	        elCell.innerHTML = "<a href='/" + oRecord.getData("symbol") + "/'>" + sData + "</a>";
+	    };
 
         var myColumnDefs = [
             {key:"symbol", label:"Symbol", sortable:true, formatter:this.formatUrl},
