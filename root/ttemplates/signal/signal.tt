@@ -8,9 +8,13 @@
 <script>
 YAHOO.util.Event.addListener(window, "load", function() {
     YAHOO.example.XHR_JSON = new function() {
+
+        this.formatUrl = function(elCell, oRecord, oColumn, sData) {
+	        elCell.innerHTML = "<a href='/" + oRecord.getData("symbol") + "/'>" + sData + "</a>"; 
+	    }; 
+
         var myColumnDefs = [
-            {key:"symbol", label:"Symbol", sortable:true},
-            {key:"item0", label:"DateTime", sortable:true},
+            {key:"symbol", label:"Symbol", sortable:true, formatter:this.formatUrl},
             {key:"item1", label:"Indicator", sortable:true}
         ];
 
@@ -47,7 +51,6 @@ YAHOO.util.Event.addListener(window, "load", function() {
     }
 
 	YAHOO.util.Event.addListener("getsignal", "click", updateSignals);
-
 });
 
 </script>
