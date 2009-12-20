@@ -65,9 +65,7 @@ YAHOO.util.Event.onDOMReady(function () {
 
 	var handleAdd = function() {
 		var txt = document.createElement("textarea");
-		var r = Math.ceil(Math.random()*10000);
-		var d = new Date();
-		txt.name="i";//+(d.getTime() + "" + r);
+		txt.name="i";
 		YAHOO.util.Event.addListener(txt, "dblclick", removeTxt);
 		var fldSet = document.createElement("fieldset");
 		var legend = document.createElement("legend");
