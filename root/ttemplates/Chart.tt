@@ -21,9 +21,6 @@
 </style>
 
   <script type="text/javascript" src="[% c.config.static_dir %]/swfobject.js"></script>
-<div>
-<button id="chart_settings">Chart Settings</button>
-</div>
         <div id="flashcontent">
                 <strong>You need to upgrade your Flash Player</strong>
         </div>
@@ -70,93 +67,67 @@ YAHOO.util.Event.onDOMReady(function () {
 		var txt = document.createElement("textarea");
 		var r = Math.ceil(Math.random()*10000);
 		var d = new Date();
-		txt.name="i"+(d.getTime() + "" + r);
+		txt.name="i";//+(d.getTime() + "" + r);
 		YAHOO.util.Event.addListener(txt, "dblclick", removeTxt);
 		var fldSet = document.createElement("fieldset");
 		var legend = document.createElement("legend");
 		legend.innerHTML = 'Additional zone';
 		fldSet.appendChild(legend);
 		fldSet.appendChild(txt);
-		this.form.appendChild(fldSet);
+		this.form.insertBefore(fldSet,this);
 	}
 
 	var reload_chart = function() {
-		var indicator_data = this.getData();
 		var sArgs = new String();
+		var f = this.form;
+	        var tf = f.timeframe.value;
+		sArgs += parseIndicators(f.o.value,"o");
+		sArgs += parseIndicators(f.signals.value,"sig");
+		sArgs += "&t=" + tf;
 
-        var tf = indicator_data['timeframe'];
-        delete indicator_data['timeframe'];
+		var panels = YAHOO.util.Dom.getElementsBy(
+			function (el) { return el.name === "i" },
+			"textarea",
+			f
+		);
 
-		sArgs += parseIndicators(indicator_data['o'],"o");
-		delete indicator_data['o'];
-
-		sArgs += parseIndicators(indicator_data['signals'],"sig");
-		delete indicator_data['signals'];
-
-		var size = 1;
-		for (var key in indicator_data) {
-			sArgs += parseIndicators(indicator_data[key],"i" + size);
+		var size=1;
+		for (var i=0;i<panels.length;i++) {
+			var txt = panels[i];
+			sArgs += parseIndicators(txt.value,"i"+size);
 			size++;
 		}
-
 		sArgs += "&cc=" + (size-1);
-		sArgs += "&t=" + tf;
 
 		var c = charts['chart1'];
 		c.reloadSettings("/chart/settings?s=[% symbol | uri %]" + sArgs);
-		this.cancel();
 	};
 
-	var handleCancel = function() {
-		this.cancel();
-	};
-
-    // Remove progressively enhanced content class, just before creating the module
-    YAHOO.util.Dom.removeClass("dlg_indicators", "yui-pe-content");
-
-	YAHOO.hostedtrader.container.dlg_indicators = new YAHOO.widget.Dialog("dlg_indicators",
-							{ width : "50em",
-							  fixedcenter : false,
-							  visible : false,
-							  constraintoviewport : true,
-							  buttons : [
-								{ text:"Add Panel", handler:handleAdd}, 
-								{ text:"Apply", handler:reload_chart, isDefault:true },
-								{ text:"Cancel", handler:handleCancel } ]
-							});
-
-	YAHOO.hostedtrader.container.dlg_indicators.validate = function() {
-		var data = this.getData();
-		return true;
-	};
-
-	// Render the Dialog
-	YAHOO.hostedtrader.container.dlg_indicators.render();
-	YAHOO.util.Event.addListener("chart_settings", "click", YAHOO.hostedtrader.container.dlg_indicators.show, YAHOO.hostedtrader.container.dlg_indicators, true);
-
+	YAHOO.util.Event.addListener("apply_changes", "click", reload_chart);
+	YAHOO.util.Event.addListener("add_panel", "click", handleAdd);
 });
 
                 // ]]>
 </script>
 
-<div id="dlg_indicators" class="yui-pe-content">
 <div class="hd">Chart Settings</div>
 <div class="bd">
-<form method="POST" action="">
+<form method="GET" action="">
 <select name="timeframe">
-<option value="hour">Hourly</option>
+<option value="hour">Hour</option>
+<option value="2hour">2Hours</option>
 <option selected value="day">Daily</option>
 <option value="week">Weekly</option>
 </select>
 <fieldset>
 <legend>Signals</legend>
-	<textarea name="signals">crossoverup(ema(close,50), ema(close,200))</textarea>
+	<textarea name="signals"></textarea>
 </fieldset>
 <fieldset>
 <legend>Overlays</legend>
-	<textarea name="o">ema(close,50)
-ema(close,200)</textarea>
+	<textarea name="o"></textarea>
 </fieldset>
+<button type="button" id="add_panel">Add Zone</button>
+<button type="button" id="apply_changes">Apply</button>
 </form>
-</div>
 </div>
