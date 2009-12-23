@@ -47,9 +47,9 @@ sub settings :Local {
 
     my @events;
 
-    my $signal_processor = Finance::HostedTrader::ExpressionParser->new();
-
     if (defined($signals) && $signals) {
+    	my $signal_processor = Finance::HostedTrader::ExpressionParser->new();
+
         if (ref(\$signals) eq 'SCALAR') {
             $signals = [$signals];
         }
