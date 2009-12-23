@@ -28,7 +28,13 @@
       <csv>
         <reverse>false</reverse>
         <separator>,</separator>
-        <date_format>YYYY-MM-DD</date_format>
+        <date_format>
+[%- IF (timeframe =='week' || timeframe == 'day') -%]
+YYYY-MM-DD
+[% ELSE -%]
+YYYY-MM-DD hh:mm
+[%- END -%]
+</date_format>
         <decimal_separator>.</decimal_separator>
         <columns>
           <column>date</column>
