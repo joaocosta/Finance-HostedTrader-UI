@@ -44,6 +44,7 @@ sub settings :Local {
     my $overlays   = $args->{'o'};
     my $chart_count= $args->{'cc'};
     my $signals    = $args->{'sig'};
+    my ($max_loaded_items, $max_display_items) = (  5000, 500 );
 
     my @events;
 
@@ -59,6 +60,7 @@ sub settings :Local {
                         'expr'            => $expr,
                         'symbol'          => $symbol, 
                         'tf'              => $timeframe, 
+                        'maxLoadedItems'  => $max_loaded_items, 
                 });
             push @events, { key => 'A', desc => $expr, dates => $dates };
         }
