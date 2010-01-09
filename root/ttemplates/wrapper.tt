@@ -24,6 +24,7 @@ body {
 <link rel="stylesheet" type="text/css" href="[% c.config.static_dir %]/s.css" />
 
 <link rel="stylesheet" type="text/css" href="[% c.config.yui_dir %]/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="[% c.config.yui_dir %]/datatable/assets/skins/sam/datatable.css" />
 <link rel="stylesheet" type="text/css" href="[% c.config.yui_dir %]/button/assets/skins/sam/button.css" />
 <link rel="stylesheet" type="text/css" href="[% c.config.yui_dir %]/container/assets/skins/sam/container.css" />
 <script type="text/javascript" src="[% c.config.yui_dir %]/yahoo-dom-event/yahoo-dom-event.js"></script>

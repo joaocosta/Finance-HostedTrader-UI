@@ -1,4 +1,5 @@
 <div>
+[% PROCESS common/timeframes.tt selected="week" name="timeframe" %]
 <textarea id="txtsignal"></textarea>
 <button id="getsignal">Test</button>
 </div>
@@ -13,9 +14,14 @@ YAHOO.util.Event.addListener(window, "load", function() {
 	        elCell.innerHTML = "<a href='/" + oRecord.getData("symbol") + "/'>" + sData + "</a>";
 	    };
 
+        this.formatChartBt = function(elCell, oRecord, oColumn, sData) {
+	        elCell.innerHTML = "<button>Chart</button>";
+            };
+
         var myColumnDefs = [
             {key:"symbol", label:"Symbol", sortable:true, formatter:this.formatUrl},
-            {key:"item1", label:"Indicator", sortable:true}
+            {key:"item1", label:"Indicator", sortable:true},
+            {key:"item2", label:"", sortable:false, formatter:this.formatChartBt}
         ];
 
         this.myDataSource = new YAHOO.util.DataSource("/signal/parse?");
@@ -30,7 +36,19 @@ YAHOO.util.Event.addListener(window, "load", function() {
         };
 
         this.myDataTable = new YAHOO.widget.DataTable("json", myColumnDefs,
-        this.myDataSource, {initialRequest:"t=week&e=trend(close,21)"});
+            this.myDataSource, {initialRequest:"t=week&e=trend(close,21)"});
+
+	this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow);
+	this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
+
+        this.myDataTable.subscribe("buttonClickEvent", function(oArgs){ 
+	            var oRecord = this.getRecord(oArgs.target);
+                    var oData = oRecord.getData();
+                    var tf = document.getElementById("timeframe").value;
+                    document.location = "/" + oData["symbol"] + "/?t=" + tf;
+	        });
+
+
     };
 
     var updateSignals = function() {
@@ -47,7 +65,8 @@ YAHOO.util.Event.addListener(window, "load", function() {
             failure : myCallback,
             scope : dt
         };
-        ds.sendRequest("t=week&e=" + txt.value, callback1);
+
+        ds.sendRequest("t="+document.getElementById('timeframe').value+"&e=" + txt.value, callback1);
     }
 
 	YAHOO.util.Event.addListener("getsignal", "click", updateSignals);
