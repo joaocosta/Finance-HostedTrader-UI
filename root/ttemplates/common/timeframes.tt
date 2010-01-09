@@ -1,0 +1,8 @@
+<select name="timeframe">
+<option value="5min">5 Minutes</option>
+<option value="15min">15 Minutes</option>
+<option value="hour">Hour</option>
+<option value="2hour">2Hours</option>
+<option selected value="day">Daily</option>
+<option value="week">Weekly</option>
+</select>
