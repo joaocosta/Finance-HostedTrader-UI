@@ -111,14 +111,7 @@ YAHOO.util.Event.onDOMReady(function () {
 <div class="hd">Chart Settings</div>
 <div class="bd">
 <form method="GET" action="">
-<select name="timeframe">
-<option value="5min">5 Minutes</option>
-<option value="15min">15 Minutes</option>
-<option value="hour">Hour</option>
-<option value="2hour">2Hours</option>
-<option selected value="day">Daily</option>
-<option value="week">Weekly</option>
-</select>
+[% PROCESS common/timeframes.tt selected="day" name="timeframe" %]
 <fieldset>
 <legend>Signals</legend>
 	<textarea name="signals"></textarea>
