@@ -1,8 +1,8 @@
-<select name="timeframe">
-<option value="5min">5 Minutes</option>
-<option value="15min">15 Minutes</option>
-<option value="hour">Hour</option>
-<option value="2hour">2Hours</option>
-<option selected value="day">Daily</option>
-<option value="week">Weekly</option>
+<select id="[% name %]" name="[% name %]">
+<option [%IF selected=="5min"%]selected[%END%] value="5min">5 Minutes</option>
+<option [%IF selected=="15min"%]selected[%END%] value="15min">15 Minutes</option>
+<option [%IF selected=="hour"%]selected[%END%] value="hour">Hour</option>
+<option [%IF selected=="2hour"%]selected[%END%] value="2hour">2Hours</option>
+<option [%IF selected=="day"%]selected[%END%] value="day">Daily</option>
+<option [%IF selected=="week"%]selected[%END%] value="week">Weekly</option>
 </select>
