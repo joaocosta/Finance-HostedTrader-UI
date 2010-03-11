@@ -45,7 +45,7 @@ YAHOO.util.Event.addListener(window, "load", function() {
 	            var oRecord = this.getRecord(oArgs.target);
                     var oData = oRecord.getData();
                     var tf = document.getElementById("timeframe").value;
-                    document.location = "/" + oData["symbol"] + "/?t=" + tf;
+                    window.open ( "/" + oData["symbol"] + "/?t=" + tf);
 	        });
 
 
