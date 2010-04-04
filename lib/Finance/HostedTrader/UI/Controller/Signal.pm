@@ -32,6 +32,7 @@ sub signal : Global {
 sub parse :Local {
     my ( $self, $c, @args ) = @_;
     my $db = Finance::HostedTrader::Datasource->new();
+    my $cfg = $db->cfg;
     my $signal_processor = Finance::HostedTrader::ExpressionParser->new($db);
     my $args = $c->request->query_params;
 
@@ -41,7 +42,7 @@ sub parse :Local {
     $c->response->content_type('application/json');
 
     my ($max_loaded_items, $max_display_items, $symbols_txt) = (1000, 1);
-    my $symbols = $db->getNaturalSymbols;
+    my $symbols = $cfg->symbols->natural;
     my @results;
     foreach my $symbol (@{$symbols}) {
         my $data = $signal_processor->getIndicatorData({ 
