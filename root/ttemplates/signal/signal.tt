@@ -21,7 +21,8 @@ YAHOO.util.Event.addListener(window, "load", function() {
         var myColumnDefs = [
             {key:"symbol", label:"Symbol", sortable:true, formatter:this.formatUrl},
             {key:"item1", label:"Indicator", sortable:true},
-            {key:"item2", label:"", sortable:false, formatter:this.formatChartBt}
+            {key:"item2", label:"Indicator", sortable:true},
+            {key:"item3", label:"", sortable:false, formatter:this.formatChartBt}
         ];
 
         this.myDataSource = new YAHOO.util.DataSource("/signal/parse?");
@@ -31,12 +32,13 @@ YAHOO.util.Event.addListener(window, "load", function() {
             resultsList: "ResultSet.Result",
             fields: [   {key: "symbol", parser:"string"},
                         {key: "item0",  parser:"string"},
-                        {key: "item1",  parser:"number"}
+                        {key: "item1",  parser:"number"},
+                        {key: "item2",  parser:"number"}
                     ]
         };
 
         this.myDataTable = new YAHOO.widget.DataTable("json", myColumnDefs,
-            this.myDataSource, {initialRequest:"t=week&e=trend(close,21)"});
+            this.myDataSource, {initialRequest:"t=week&e=abs(trend(close,21)),trend(close,21)"});
 
 	this.myDataTable.subscribe("rowMouseoverEvent", this.myDataTable.onEventHighlightRow);
 	this.myDataTable.subscribe("rowMouseoutEvent", this.myDataTable.onEventUnhighlightRow);
