@@ -37,7 +37,7 @@ sub parse :Local {
     my $args = $c->request->query_params;
 
     my $timeframe  = $args->{'t'} || 'day';
-    my $expr = $args->{'e'};
+    my $expr = 'datetime,'.$args->{'e'};
 
     $c->response->content_type('application/json');
 
@@ -46,11 +46,11 @@ sub parse :Local {
     my @results;
     foreach my $symbol (@{$symbols}) {
         my $data = $signal_processor->getIndicatorData({ 
-								    'expr'   => $expr, 
+								    'fields' => $expr, 
 								    'symbol' => $symbol, 
 								    'tf'     => $timeframe, 
 								    'maxLoadedItems' => $max_loaded_items, 
-								    'maxDisplayItems' => $max_display_items,
+								    'numItems' => $max_display_items,
                                 });
         next unless(defined($data));
         $data = $data->[0];

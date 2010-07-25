@@ -58,9 +58,10 @@ sub settings :Local {
         foreach my $expr (@{$signals}) {
             my $dates = $signal_processor->getSignalData( {
                         'expr'            => $expr,
+                        'fields'          => 'datetime',
                         'symbol'          => $symbol, 
                         'tf'              => $timeframe, 
-                        'maxLoadedItems'  => $max_loaded_items, 
+                        'numItems'  => $max_loaded_items, 
                 });
             push @events, { key => 'A', desc => $expr, dates => $dates };
         }
@@ -98,16 +99,16 @@ sub data :Local {
 
     my $indicator_processor = Finance::HostedTrader::ExpressionParser->new();
     my $expr;
-    $expr = "open,high,low,close";
+    $expr = "datetime,open,high,low,close";
     $expr.= ',' . join(',', @$indicators) if(scalar(@$indicators));
 
     my $data = $indicator_processor->getIndicatorData(
 		{
-                        'expr'            => $expr,
+                        'fields'          => $expr,
                         'symbol'          => $symbol, 
                         'tf'              => $timeframe, 
                         'maxLoadedItems'  => $max_loaded_items, 
-                        'maxDisplayItems' => $max_display_items
+                        'numItems' => $max_display_items
 		});
 
     $c->response->content_type('text/plain');
