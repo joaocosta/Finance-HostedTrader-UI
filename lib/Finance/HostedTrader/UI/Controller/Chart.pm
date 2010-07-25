@@ -63,7 +63,8 @@ sub settings :Local {
                         'tf'              => $timeframe, 
                         'numItems'  => $max_loaded_items, 
                 });
-            push @events, { key => 'A', desc => $expr, dates => $dates };
+            my @d = map {$_->[0]} @$dates;
+            push @events, { key => 'A', desc => $expr, dates => \@d };
         }
     }
 
