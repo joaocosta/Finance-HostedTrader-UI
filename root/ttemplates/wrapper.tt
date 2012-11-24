@@ -40,6 +40,17 @@ body {
 </head>
 
 <body class="yui-skin-sam">
+<script type="text/javascript"><!--
+google_ad_client = "pub-7371971583342211";
+/* 728x90, created 29/05/10 */
+google_ad_slot = "1562749671";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
 <div id="Header"><a href="/" title="FXHistoricalData Home">FXHISTORICALDATA.COM</a></div>
 
 <div id="Content">
