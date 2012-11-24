@@ -23,6 +23,7 @@ To cut a distribution:
     git st # Make sure it's clean
     perl Makefile.PL
     rm MYMETA.json
-    mv MYMETA.yml META.yml
+    git META.YML MYMETA.yml
+    mv MYMETA.yml META.yml  # or merge the two files if you don't want to loose some change in the existing META.yml
     make manifest
     make dist
