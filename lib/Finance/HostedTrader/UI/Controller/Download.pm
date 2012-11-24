@@ -28,7 +28,7 @@ sub index :Path :Args(1) {
     my $timeframe  = $args->{'t'} || 'day';
 
     my $filename = "$symbol\_$timeframe.zip";
-    my $fullpath = "/home/fxhistor/download/$filename";
+    my $fullpath = "/home/joao/download/$filename";
 
     $c->response->content_type('multipart/x-zip');
     $c->response->headers->content_length( -s $fullpath );
