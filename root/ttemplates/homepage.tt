@@ -1,11 +1,11 @@
 <ul>
 
-	<li><a href='/AUDCHF/'>AUDCHF</a></li>
+	<!--li><a href='/AUDCHF/'>AUDCHF</a></li-->
 	<li><a href='/AUDJPY/'>AUDJPY</a></li>
 	<li><a href='/AUDUSD/'>AUDUSD</a></li>
-	<li><a href='/CADJPY/'>CADJPY</a></li>
+	<!--li><a href='/CADJPY/'>CADJPY</a></li-->
 	<li><a href='/CHFJPY/'>CHFJPY</a></li>
-	<li><a href='/EURAUD/'>EURAUD</a></li>
+	<!--li><a href='/EURAUD/'>EURAUD</a></li-->
 
 	<li><a href='/EURCHF/'>EURCHF</a></li>
 	<li><a href='/EURGBP/'>EURGBP</a></li>
@@ -21,13 +21,13 @@
 	<li><a href='/USDJPY/'>USDJPY</a></li>
 	<li><a href='/XAGUSD/'>XAGUSD</a></li>
 
-	<li><a href='/XAUAUD/'>XAUAUD</a></li>
+	<--li><a href='/XAUAUD/'>XAUAUD</a></li>
 	<li><a href='/XAUCAD/'>XAUCAD</a></li>
 	<li><a href='/XAUCHF/'>XAUCHF</a></li>
 	<li><a href='/XAUGBP/'>XAUGBP</a></li>
 	<li><a href='/XAUEUR/'>XAUEUR</a></li>
 	<li><a href='/XAUJPY/'>XAUJPY</a></li>
 
-	<li><a href='/XAUNZD/'>XAUNZD</a></li>
+	<li><a href='/XAUNZD/'>XAUNZD</a></li-->
 	<li><a href='/XAUUSD/'>XAUUSD</a></li>
 </ul>

@@ -31,4 +31,4 @@ requires:
   Finance::HostedTrader: 0
   JSON: 0
   parent: 0
-version: 0.01
+version: 0.02
