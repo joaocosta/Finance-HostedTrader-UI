@@ -38,11 +38,11 @@ sub parse :Local {
 
     my $timeframe  = $args->{'t'} || 'day';
     my $expr = 'datetime,'.$args->{'e'};
+    my $symbols = (defined($args->{'s'}) ? [ split( ',', $args->{'s'}) ] : $cfg->symbols->natural);
 
     $c->response->content_type('application/json');
 
     my ($max_loaded_items, $max_display_items, $symbols_txt) = (1000, 1);
-    my $symbols = $cfg->symbols->natural;
     my @results;
     foreach my $symbol (@{$symbols}) {
         my $data = $signal_processor->getIndicatorData({ 
