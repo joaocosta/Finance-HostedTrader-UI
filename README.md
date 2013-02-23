@@ -18,6 +18,8 @@ VIEW:
     script/finance_hostedtrader_ui_create.pl view TT TT
     script/finance_hostedtrader_ui_create.pl view chart TT
 
+To run a development version:
+    script/finance_hostedtrader_ui_server.pl -r
 
 To cut a distribution:
     vi lib/Finance/HostedTrader/UI.pm # update version number
