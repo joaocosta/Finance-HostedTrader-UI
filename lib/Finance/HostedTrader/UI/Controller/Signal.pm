@@ -39,6 +39,7 @@ sub parse :Local {
     my $timeframe  = $args->{'t'} || 'day';
     my $expr = 'datetime,'.$args->{'e'};
     my $symbols = (defined($args->{'s'}) ? [ split( ',', $args->{'s'}) ] : $cfg->symbols->natural);
+    my $jsonp_callback = $args->{'jsoncallback'};
 
     $c->response->content_type('application/json');
 
@@ -72,7 +73,11 @@ sub parse :Local {
         }
     };
 
-    $c->response->write(to_json($obj));
+    if ($jsonp_callback) {
+        $c->response->write($jsonp_callback . '(' . to_json($obj) . ')');
+    } else {
+        $c->response->write(to_json($obj));
+    }
 }
 
 sub end : Private {
