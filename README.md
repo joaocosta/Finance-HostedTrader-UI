@@ -20,6 +20,8 @@ VIEW:
 
 
 To cut a distribution:
+    vi lib/Finance/HostedTrader/UI.pm # update version number
+    git commit -m "update version number for new release" lib/Finance/HostedTrader/UI.pm
     git st # Make sure it's clean
     perl Makefile.PL
     rm MYMETA.json
@@ -27,3 +29,15 @@ To cut a distribution:
     mv MYMETA.yml META.yml  # or merge the two files if you don't want to loose some change in the existing META.yml
     make manifest
     make dist
+    cpanspec Finance-HostedTrader-UI-*.tar.gz
+    vimdiff perl-Finance-HostedTrader-UI.spec /opt/src/Finance-provisioning/build_packages/perl/specs/perl-Finance-HostedTrader-UI.spec
+    mv perl-Finance-HostedTrader-UI.spec /opt/src/Finance-provisioning/build_packages/perl/specs/perl-Finance-HostedTrader-UI.spec
+    mach build /opt/src/Finance-provisioning/build_packages/perl/specs/perl-Finance-HostedTrader-UI.spec
+    cd /opt/src/Finance-provisioning/
+    git commit -m "Updated spec file for latest version" /opt/src/Finance-provisioning/build_packages/perl/specs/perl-Finance-HostedTrader-UI.spec
+    find /var/tmp/mach/fedora-16-x86_64-updates -name "*rpm" -exec scp -P guess_the_port {} joao@zonalivre.org:~/rpmbuild/RPMS/noarch/. \;
+    ssh -p guess_the_port joao@zonalivre.org createrepo ~/rpmbuild/RPMS/noarch
+
+    If mach build fails, try:
+    mach clean
+    cp /etc/yum.repos.d/zonalivre.repo /var/lib/mach/states/fedora-16-x86_64-updates/yum/yum.repos.d/
