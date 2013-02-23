@@ -27,7 +27,7 @@ To cut a distribution:
     git st # Make sure it's clean
     perl Makefile.PL
     rm MYMETA.json
-    diff META.YML MYMETA.yml
+    diff META.yml MYMETA.yml
     mv MYMETA.yml META.yml  # or merge the two files if you don't want to loose some change in the existing META.yml
     make manifest
     make dist
@@ -37,8 +37,8 @@ To cut a distribution:
     mach build /opt/src/Finance-provisioning/build_packages/perl/specs/perl-Finance-HostedTrader-UI.spec
     cd /opt/src/Finance-provisioning/
     git commit -m "Updated spec file for latest version" /opt/src/Finance-provisioning/build_packages/perl/specs/perl-Finance-HostedTrader-UI.spec
-    find /var/tmp/mach/fedora-16-x86_64-updates -name "*rpm" -exec scp -P guess_the_port {} joao@zonalivre.org:~/rpmbuild/RPMS/noarch/. \;
-    ssh -p guess_the_port joao@zonalivre.org createrepo ~/rpmbuild/RPMS/noarch
+    find /var/tmp/mach/fedora-16-x86_64-updates -name "*rpm" -exec scp -P $PORT {} joao@zonalivre.org:~/rpmbuild/RPMS/noarch/. \;
+    ssh -p $PORT joao@zonalivre.org createrepo ~/rpmbuild/RPMS/noarch
 
     If mach build fails, try:
     mach clean
