@@ -1,0 +1,265 @@
+<html>
+    <head>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.cookie/1.3.1/jquery.cookie.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var symbolCurrencyMap = {
+                    AUDJPY: "JPY",
+                    AUDUSD: "USD",
+                    CHFJPY: "JPY",
+                    EURCAD: "CAD",
+                    EURCHF: "CHF",
+                    EURGBP: "GBP",
+                    EURJPY: "JPY",
+                    EURUSD: "USD",
+                    GBPCHF: "CHF",
+                    GBPJPY: "JPY",
+                    GBPUSD: "USD",
+                    NZDJPY: "JPY",
+                    NZDUSD: "USD",
+                    USDCAD: "CAD",
+                    USDCHF: "CHF",
+                    USDJPY: "JPY",
+                    XAGUSD: "USD",
+                    XAUUSD: "USD",
+                };
+
+                $('#entry').keyup(function() {
+                        $('#currentPriceTime').text('');
+                        });
+                $('#getCurrentPrice').click(function() {
+                    var symbol = $('#instrument').val();
+                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=5min&e=close&s="+symbol+"&jsoncallback=?",
+                        function(data) {
+                            $('#entry').val(data.ResultSet.Result[0]['item1']).change();
+                            $('#currentPriceTime').text(data.ResultSet.Result[0]['item0']);
+                        });
+                    });
+
+                $('#getPreviousHigh').click(function() {
+                    var symbol = $('#instrument').val();
+                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=day&e=max(high,16)&s="+symbol+"&jsoncallback=?",
+                        function(data) {
+                            $('#exit').val(data.ResultSet.Result[0]['item1']).change();
+                        });
+                    });
+
+                $('#getPreviousLow').click(function() {
+                    var symbol = $('#instrument').val();
+                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=day&e=min(low,16)&s="+symbol+"&jsoncallback=?",
+                        function(data) {
+                            $('#exit').val(data.ResultSet.Result[0]['item1']).change();
+                        });
+                    });
+
+                $('.recalculate').change(calculatePositionSize);
+                $('#positionSize').change(calculateMaxLoss);
+                $('.persistValue').change(function() {
+                        $.cookie(this.name, this.value, { expires: 30 });
+                    });
+
+                $('.persistValue').each(function(index, obj) {
+                        var cookieValue = $.cookie(obj.name);
+                        $(obj).val(cookieValue);
+                    });
+
+                var $maxLossCookie = $.cookie('maxLoss');
+                if ($maxLossCookie) {
+                    $('#maxLoss').val($maxLossCookie);
+                }
+
+                function getRatioCurrency() {
+                    var symbolCurrency = symbolCurrencyMap[$('#instrument').val()];
+                    var accountCurrency = $('#accountCurrency').val();
+                    if (symbolCurrency === accountCurrency) {
+                        return;
+                    }
+
+                    var symbol = accountCurrency + symbolCurrency;
+                    return symbol;
+                }
+
+                function calculateMaxLoss() {
+                    var $positionSize = $('#positionSize').val();
+                    var $entry = $('#entry').val();
+                    var $exit = $('#exit').val();
+
+                    if (!$positionSize || !$entry || !$exit) {
+                        return;
+                    }
+
+                    var $ratioCurrency = getRatioCurrency();
+                    if ($ratioCurrency) {
+                        $.getJSON("http://www.fxhistoricaldata.com/signal/lastclose?s="+$ratioCurrency+"&jsoncallback=?",
+                            function(data) {
+                                var $ratio = data.ResultSet.Result[0]['item1'];
+                                var $maxLoss = parseInt($positionSize * ($entry - $exit) / $ratio, 10);
+                                $('#maxLoss').val($maxLoss);
+                                setTextExplanation($entry, $exit, $positionSize, $maxLoss);
+                            }
+                        );
+                    } else {
+                        var $maxLoss = parseInt($positionSize * ($entry - $exit), 10);
+                        $('#maxLoss').val($maxLoss);
+                        setTextExplanation($entry, $exit, $positionSize, $maxLoss);
+                    }
+                }
+
+                function setTextExplanation($entry, $exit, $positionSize, $maxLoss) {
+                    var $longshort = ($entry > $exit ? 'buy' : 'short');
+                    var $instrument = $('#instrument').val();
+                    var $accountCurrency = $('#accountCurrency').val();
+                    $('#textualExplanation').text('If you ' + $longshort + ' ' + parseInt(Math.abs($positionSize), 10) + ' ' + $instrument + ' at ' + $entry + ', and hit stop loss at ' + $exit + ', your loss will be ' + $maxLoss + ' ' + $accountCurrency);
+                }
+
+                function calculatePositionSize() {
+                    var $maxLoss = $('#maxLoss').val();
+                    var $entry = $('#entry').val();
+                    var $exit = $('#exit').val();
+
+                    if (!$maxLoss || !$entry || !$exit) {
+                        return;
+                    }
+
+                    var $ratioCurrency = getRatioCurrency();
+                    if ($ratioCurrency) {
+                        $.getJSON("http://www.fxhistoricaldata.com/signal/lastclose?s="+$ratioCurrency+"&jsoncallback=?",
+                            function(data) {
+                                var $ratio = data.ResultSet.Result[0]['item1'];
+                                var $positionSize = parseInt($maxLoss * $ratio / ($entry - $exit), 10);
+                                $('#positionSize').val($positionSize);
+                                setTextExplanation($entry, $exit, $positionSize, $maxLoss);
+                            }
+                        );
+                    } else {
+                        var $positionSize = parseInt($maxLoss / ($entry - $exit), 10);
+                        $('#positionSize').val($positionSize);
+                        setTextExplanation($entry, $exit, $positionSize, $maxLoss);
+                    }
+                }
+
+            });
+        </script>
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.1/build/cssreset/cssreset-min.css">
+        <style type="text/css">
+
+            html {
+                font: 90%/1.3 arial,sans-serif;
+                padding:1em;
+                background:#fafafa;
+            }
+
+            body {
+                padding: 0;
+                margin: 20px;
+                color: #333;
+                background: #fff;
+                font: 12px arial, verdana, sans-serif;
+            }
+
+            fieldset {
+                margin: 1em 0;
+                border: none;
+                border-top: 1px solid #ccc;
+            }
+
+            legend {
+                margin: 1em 0;
+                padding: 0 .5em;
+                color: #036;
+                background: transparent;
+                font-size: 1.3em;
+                font-weight: bold;
+            }
+            label {
+                float: left;
+                width: 100px;
+                padding: 0 1em;
+                text-align: right;
+            }
+            fieldset div {
+                margin-bottom: .1em;
+                padding: 0;
+                display: block;
+            }
+            fieldset div input, fieldset div select {
+                width: 150px;
+                border-top: 1px solid #555;
+                border-left: 1px solid #555;
+                border-bottom: 1px solid #ccc;
+                border-right: 1px solid #ccc;
+                padding: 1px;
+                color: #333;
+            }
+            fieldset div button {
+                padding: 0px;
+                width: 150px;
+            }
+            button#getPreviousLow, button#getPreviousHigh {
+                width: 74px;
+            }
+
+            input:focus, textarea:focus {
+                background: #efefef;
+                color: #000;
+            }
+        </style>
+    </head>
+    <body>
+        <form>
+            <fieldset><legend>Position Size</legend>
+                <div>
+                    <label for="instrument">Instrument</label>
+                    <select name="instrument" id="instrument" class="persistValue">
+                        <option value="AUDJPY">AUDJPY</option>
+                        <option value="AUDUSD">AUDUSD</option>
+                        <option value="CHFJPY">CHFJPY</option>
+                        <option value="EURCAD">EURCAD</option>
+                        <option value="EURCHF">EURCHF</option>
+                        <option value="EURGBP">EURGBP</option>
+                        <option value="EURJPY">EURJPY</option>
+                        <option value="EURUSD">EURUSD</option>
+                        <option value="GBPCHF">GBPCHF</option>
+                        <option value="GBPJPY">GBPJPY</option>
+                        <option value="GBPUSD">GBPUSD</option>
+                        <option value="NZDJPY">NZDJPY</option>
+                        <option value="NZDUSD">NZDUSD</option>
+                        <option value="USDCAD">USDCAD</option>
+                        <option value="USDCHF">USDCHF</option>
+                        <option value="USDJPY">USDJPY</option>
+                        <option value="XAGUSD">XAGUSD</option>
+                        <option value="XAUUSD">XAUUSD</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="entry">Entry</label>
+                    <input type="text" name="entry" id="entry" class="recalculate" />
+                    <button type="button" id="getCurrentPrice">Last Known Price</button>
+                    <span id="currentPriceTime"></span>
+                </div>
+                <div>
+                    <label for="exit">Stop Loss</label>
+                    <input type="text" name="exit" id="exit" class="recalculate" />
+                    <button type="button" id="getPreviousLow">Long</button>
+                    <button type="button" id="getPreviousHigh">Short</button>
+                </div>
+                <div>
+                    <label for="maxLoss">Max Loss</label>
+                    <input type="text" name="maxLoss" id="maxLoss" class="recalculate persistValue" />
+                    <select name="accountCurrency" id="accountCurrency" class="recalculate">
+                        <option value="GBP">GBP</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="CHF">CHF</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="positionSize">Position Size</label>
+                    <input type="text" name="positionSize" id="positionSize" />
+                </div>
+            </fieldset>
+        </form>
+        <div id="textualExplanation"></div>
+    </body>
+</html>
