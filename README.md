@@ -36,7 +36,7 @@ To cut a distribution:
     rm perl-Finance-HostedTrader-UI.spec
     mach build spec/perl-Finance-HostedTrader-UI.spec
     git commit -m "Updated spec file for latest version" spec/perl-Finance-HostedTrader-UI.spec
-    find /var/tmp/mach/fedora-16-x86_64-updates -name "*rpm" -exec scp -P $PORT {} joao@zonalivre.org:~/rpmbuild/RPMS/noarch/. \;
+    find /var/tmp/mach/fedora-16-x86_64-updates -name "perl-Finance-HostedTrader-UI-*rpm" -exec scp -P $PORT {} joao@zonalivre.org:~/rpmbuild/RPMS/noarch/. \;
     ssh -p $PORT joao@zonalivre.org createrepo ~/rpmbuild/RPMS/noarch
 
     If mach build fails, try:
