@@ -32,11 +32,10 @@ To cut a distribution:
     make manifest
     make dist
     cpanspec Finance-HostedTrader-UI-*.tar.gz
-    vimdiff perl-Finance-HostedTrader-UI.spec /opt/src/Finance-provisioning/build_packages/perl/specs/perl-Finance-HostedTrader-UI.spec
-    mv perl-Finance-HostedTrader-UI.spec /opt/src/Finance-provisioning/build_packages/perl/specs/perl-Finance-HostedTrader-UI.spec
-    mach build /opt/src/Finance-provisioning/build_packages/perl/specs/perl-Finance-HostedTrader-UI.spec
-    cd /opt/src/Finance-provisioning/
-    git commit -m "Updated spec file for latest version" /opt/src/Finance-provisioning/build_packages/perl/specs/perl-Finance-HostedTrader-UI.spec
+    vimdiff perl-Finance-HostedTrader-UI.spec spec/perl-Finance-HostedTrader-UI.spec
+    rm perl-Finance-HostedTrader-UI.spec
+    mach build spec/perl-Finance-HostedTrader-UI.spec
+    git commit -m "Updated spec file for latest version" spec/perl-Finance-HostedTrader-UI.spec
     find /var/tmp/mach/fedora-16-x86_64-updates -name "*rpm" -exec scp -P $PORT {} joao@zonalivre.org:~/rpmbuild/RPMS/noarch/. \;
     ssh -p $PORT joao@zonalivre.org createrepo ~/rpmbuild/RPMS/noarch
 
