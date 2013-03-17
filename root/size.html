@@ -39,7 +39,7 @@
 
                 $('#getPreviousHigh').click(function() {
                     var symbol = $('#instrument').val();
-                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=day&e=max(high,16)&s="+symbol+"&jsoncallback=?",
+                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=hour&e=max(high,396)&s="+symbol+"&jsoncallback=?",
                         function(data) {
                             $('#exit').val(data.ResultSet.Result[0]['item1']).change();
                         });
@@ -47,7 +47,7 @@
 
                 $('#getPreviousLow').click(function() {
                     var symbol = $('#instrument').val();
-                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=day&e=min(low,16)&s="+symbol+"&jsoncallback=?",
+                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=hour&e=min(low,396)&s="+symbol+"&jsoncallback=?",
                         function(data) {
                             $('#exit').val(data.ResultSet.Result[0]['item1']).change();
                         });
