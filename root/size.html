@@ -5,40 +5,40 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 var symbolCurrencyMap = {
-                    AUDJPY: "JPY",
-                    AUDUSD: "USD",
-                    CHFJPY: "JPY",
-                    EURCAD: "CAD",
-                    EURCHF: "CHF",
-                    EURGBP: "GBP",
-                    EURJPY: "JPY",
-                    EURUSD: "USD",
-                    GBPCHF: "CHF",
-                    GBPJPY: "JPY",
-                    GBPUSD: "USD",
-                    NZDJPY: "JPY",
-                    NZDUSD: "USD",
-                    USDCAD: "CAD",
-                    USDCHF: "CHF",
-                    USDJPY: "JPY",
-                    XAGUSD: "USD",
-                    XAUUSD: "USD",
-                    Copper: "USD",
-                    XPDUSD: "USD",
-                    XPTUSD: "USD",
-                    UKOil: "GBP",
-                    USOil: "USD",
-                    AUS200: "AUD",
-                    ESP35: "EUR",
-                    FRA40: "EUR",
-                    GER30: "EUR",
-                    ITA40: "EUR",
-                    JPN225: "JPY",
-                    NAS100: "USD",
-                    SPX500: "USD",
-                    SUI30: "CHF",
-                    UK100: "GBP",
-                    US30: "USD",
+                    AUDJPY: ["JPY",100],
+                    AUDUSD: ["USD",10000],
+                    CHFJPY: ["JPY",100],
+                    EURCAD: ["CAD",10000],
+                    EURCHF: ["CHF",10000],
+                    EURGBP: ["GBP",10000],
+                    EURJPY: ["JPY",100],
+                    EURUSD: ["USD",10000],
+                    GBPCHF: ["CHF",10000],
+                    GBPJPY: ["JPY",100],
+                    GBPUSD: ["USD",10000],
+                    NZDJPY: ["JPY",100],
+                    NZDUSD: ["USD",10000],
+                    USDCAD: ["CAD",10000],
+                    USDCHF: ["CHF",10000],
+                    USDJPY: ["JPY",100],
+                    XAGUSD: ["USD",200],
+                    XAUUSD: ["USD",10],
+                    Copper: ["USD",2000],
+                    XPDUSD: ["USD",10],
+                    XPTUSD: ["USD",10],
+                    UKOil: ["GBP",100],
+                    USOil: ["USD",100],
+                    AUS200: ["AUD",1],
+                    ESP35: ["EUR",1],
+                    FRA40: ["EUR",1],
+                    GER30: ["EUR",1],
+                    ITA40: ["EUR",1],
+                    JPN225: ["JPY",1],
+                    NAS100: ["USD",1],
+                    SPX500: ["USD",1],
+                    SUI30: ["CHF",1],
+                    UK100: ["GBP",1],
+                    US30: ["USD",1],
                 };
 
                 $('#entry').keyup(function() {
@@ -86,7 +86,7 @@
                 }
 
                 function getRatioCurrency() {
-                    var symbolCurrency = symbolCurrencyMap[$('#instrument').val()];
+                    var symbolCurrency = symbolCurrencyMap[$('#instrument').val()][0];
                     var accountCurrency = $('#accountCurrency').val();
                     if (symbolCurrency === accountCurrency) {
                         return;
@@ -153,6 +153,7 @@
                         $('#positionSize').val($positionSize);
                         setTextExplanation($entry, $exit, $positionSize, $maxLoss);
                     }
+                    $('#sizePerPoint').val($maxLoss / ($entry-$exit) / symbolCurrencyMap[ $('#instrument').val() ][1]  );
                 }
 
             });
@@ -289,6 +290,10 @@
                 <div>
                     <label for="positionSize">Position Size</label>
                     <input type="text" name="positionSize" id="positionSize" />
+                </div>
+                <div>
+                    <label for="sizePerPoint">Size per point</label>
+                    <input type="text" name="sizePerPoint" id="sizePerPoint" />
                 </div>
             </fieldset>
         </form>
