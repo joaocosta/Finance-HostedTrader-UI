@@ -32,13 +32,12 @@ To cut a distribution:
     make manifest
     make dist
     cpanspec Finance-HostedTrader-UI-*.tar.gz
+    cp Finance-HostedTrader-UI-*.tar.gz ~/rpmbuild/SOURCES/.
     vimdiff perl-Finance-HostedTrader-UI.spec spec/perl-Finance-HostedTrader-UI.spec
     rm perl-Finance-HostedTrader-UI.spec
-    mach build spec/perl-Finance-HostedTrader-UI.spec
+    cp spec/perl-Finance-HostedTrader-UI.spec ~/.
+    rpmbuild -bs ~/perl-Finance-HostedTrader-UI.spec
+    mock rebuild --no-clean ~/rpmbuild/SRPMS/perl-Finance-HostedTrader-UI*
     git commit -m "Updated spec file for latest version" spec/perl-Finance-HostedTrader-UI.spec
-    find /var/tmp/mach/fedora-16-x86_64-updates -name "perl-Finance-HostedTrader-UI-*rpm" -exec scp -P $PORT {} joao@zonalivre.org:~/rpmbuild/RPMS/noarch/. \;
+    scp -P $PORT /var/lib/mock/fedora-20-x86_64/result/*rpm joao@zonalivre.org:~/rpmbuild/RPMS/noarch/.
     ssh -p $PORT joao@zonalivre.org createrepo ~/rpmbuild/RPMS/noarch
-
-    If mach build fails, try:
-    mach clean
-    cp /etc/yum.repos.d/zonalivre.repo /var/lib/mach/states/fedora-16-x86_64-updates/yum/yum.repos.d/
