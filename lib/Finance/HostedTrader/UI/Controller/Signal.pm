@@ -54,40 +54,7 @@ sub lastclose :Local {
 
     my @results;
     foreach my $symbol (@{$symbols}) {
-        my $sql;
-        if ($available_symbols{$symbol}) {
-            $sql = qq{
-                SELECT T1.datetime,
-                ROUND(T1.close,4) AS close
-                FROM $symbol\_$timeframe AS T1
-                ORDER BY T1.datetime DESC
-                LIMIT 1
-            };
-        } else {
-            my $sym1 = substr( $symbol, 0, 3 ); #TODO hardcoded it's a forex AAABBB symbol
-            my $sym2 = substr( $symbol, 3, 3 );
-            my $synthetic_info = $db->getSyntheticComponents($sym1, $sym2);
-            my $op = $synthetic_info->{op};
-            my $leftop = $synthetic_info->{leftop};
-            my $rightop = $synthetic_info->{rightop};
-
-            $sql = qq{
-                SELECT T1.datetime,
-                ROUND(T1.close $op T2.close,4) AS close
-                FROM $leftop\_$timeframe AS T1, $rightop\_$timeframe AS T2
-                WHERE T1.datetime = T2.datetime
-                ORDER BY T1.datetime DESC
-                LIMIT 1
-            };
-        }
-        my ($datetime, $close) = $db->dbh->selectrow_array($sql);
-        my %hash = (
-            symbol  => $symbol,
-            item0   => $datetime,
-            item1   => $close,
-        );
-
-        push @results, \%hash;
+        push @results, $db->getLastClose( symbol => $symbol);
     }
 
     my $obj = {
