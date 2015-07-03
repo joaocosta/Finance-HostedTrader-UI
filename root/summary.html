@@ -1,0 +1,226 @@
+<html>
+    <head>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.cookie/1.3.1/jquery.cookie.js"></script>
+        <script type="text/javascript">
+        "use strict";
+            $(document).ready(function() {
+                var symbolCurrencyMap = {
+                    AUDJPY: ["JPY",100,1],
+                    AUDUSD: ["USD",10000,1],
+                    CHFJPY: ["JPY",100,1],
+                    EURCAD: ["CAD",10000,1],
+                    EURCHF: ["CHF",10000,1],
+                    EURGBP: ["GBP",10000,1],
+                    EURJPY: ["JPY",100,1],
+                    EURUSD: ["USD",10000,1],
+                    GBPCHF: ["CHF",10000,1],
+                    GBPJPY: ["JPY",100,1],
+                    GBPNZD: ["NZD",10000,1],
+                    GBPUSD: ["USD",10000,1],
+                    NZDJPY: ["JPY",100,1],
+                    NZDUSD: ["USD",10000,1],
+                    USDCAD: ["CAD",10000,1],
+                    USDCHF: ["CHF",10000,1],
+                    USDJPY: ["JPY",100,1],
+                    XAGUSD: ["USD",200,1],
+                    XAUUSD: ["USD",10,1],
+                    Copper: ["USD",2000,1],
+                    XPDUSD: ["USD",10,1],
+                    XPTUSD: ["USD",10,1],
+                    UKOil: ["GBP",100,1],
+                    USOil: ["USD",100,1],
+                    AUS200: ["AUD",1,1],
+                    ESP35: ["EUR",1,1],
+                    FRA40: ["EUR",1,1],
+                    GER30: ["EUR",1,1],
+                    HKG33: ["HKD",1,1],
+                    ITA40: ["EUR",1,1],
+                    JPN225: ["JPY",1,1],
+                    NAS100: ["USD",1,1],
+                    SPX500: ["USD",1,1],
+                    SUI30: ["CHF",1,1],
+                    UK100: ["GBP",1,1],
+                    US30: ["USD",1,1],
+                    Bund: ["EUR",100,10],
+                    NGAS: ["USD",1000,1],
+                };
+
+                $('#instrument').change(function() {
+                    var symbol = $('#instrument').val();
+
+                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=5min&e=close&s="+symbol+"&jsoncallback=?",
+                        function(data) {
+                            $('#lastclose').val(data.ResultSet.Result[0]['item1']).change();
+                            $('#lastCloseTime').text(data.ResultSet.Result[0]['item0']);
+                        });
+
+                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=2hour&e=rsi(close,14)&s="+symbol+"&jsoncallback=?",
+                        function(data) {
+                            $('#rsi2hour').val(data.ResultSet.Result[0]['item1']).change();
+                            $('#rsi2hourTime').text(data.ResultSet.Result[0]['item0']);
+                        });
+
+                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=4hour&e=rsi(close,14)&s="+symbol+"&jsoncallback=?",
+                        function(data) {
+                            $('#rsi4hour').val(data.ResultSet.Result[0]['item1']).change();
+                            $('#rsi4hourTime').text(data.ResultSet.Result[0]['item0']);
+                        });
+
+                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=day&e=rsi(close,14)&s="+symbol+"&jsoncallback=?",
+                        function(data) {
+                            $('#rsiday').val(data.ResultSet.Result[0]['item1']).change();
+                            $('#rsidayTime').text(data.ResultSet.Result[0]['item0']);
+                        });
+
+                    });
+
+                $('.persistValue').change(function() {
+                        $.cookie(this.name, this.value, { expires: 30 });
+                    });
+
+                $('.persistValue').each(function(index, obj) {
+                        var cookieValue = $.cookie(obj.name);
+                        $(obj).val(cookieValue);
+                    });
+
+                $('#instrument').change();
+
+            });
+        </script>
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.1/build/cssreset/cssreset-min.css">
+        <style type="text/css">
+
+            html {
+                font: 90%/1.3 arial,sans-serif;
+                padding:1em;
+                background:#fafafa;
+            }
+
+            body {
+                padding: 0;
+                margin: 20px;
+                color: #333;
+                background: #fff;
+                font: 12px arial, verdana, sans-serif;
+            }
+
+            fieldset {
+                margin: 1em 0;
+                border: none;
+                border-top: 1px solid #ccc;
+            }
+
+            legend {
+                margin: 1em 0;
+                padding: 0 .5em;
+                color: #036;
+                background: transparent;
+                font-size: 1.3em;
+                font-weight: bold;
+            }
+            label {
+                float: left;
+                width: 100px;
+                padding: 0 1em;
+                text-align: right;
+            }
+            fieldset div {
+                margin-bottom: .1em;
+                padding: 0;
+                display: block;
+            }
+            fieldset div input, fieldset div select {
+                width: 150px;
+                border-top: 1px solid #555;
+                border-left: 1px solid #555;
+                border-bottom: 1px solid #ccc;
+                border-right: 1px solid #ccc;
+                padding: 1px;
+                color: #333;
+            }
+            fieldset div button {
+                padding: 0px;
+                width: 150px;
+            }
+            button#getPreviousLow, button#getPreviousHigh {
+                width: 74px;
+            }
+
+            input:focus, textarea:focus {
+                background: #efefef;
+                color: #000;
+            }
+        </style>
+    </head>
+    <body>
+        <form>
+            <fieldset><legend>Summary</legend>
+                <div>
+                    <label for="instrument">Instrument</label>
+                    <select name="instrument" id="instrument" class="persistValue">
+                        <option value="AUDJPY">AUDJPY</option>
+                        <option value="AUDUSD">AUDUSD</option>
+                        <option value="CHFJPY">CHFJPY</option>
+                        <option value="EURCAD">EURCAD</option>
+                        <option value="EURCHF">EURCHF</option>
+                        <option value="EURGBP">EURGBP</option>
+                        <option value="EURJPY">EURJPY</option>
+                        <option value="EURUSD">EURUSD</option>
+                        <option value="GBPCHF">GBPCHF</option>
+                        <option value="GBPJPY">GBPJPY</option>
+                        <option value="GBPNZD">GBPNZD</option>
+                        <option value="GBPUSD">GBPUSD</option>
+                        <option value="NZDJPY">NZDJPY</option>
+                        <option value="NZDUSD">NZDUSD</option>
+                        <option value="USDCAD">USDCAD</option>
+                        <option value="USDCHF">USDCHF</option>
+                        <option value="USDJPY">USDJPY</option>
+                        <option value="XAGUSD">XAGUSD</option>
+                        <option value="XAUUSD">XAUUSD</option>
+                        <option value="Copper">Copper</option>
+                        <option value="AUS200">AUS200</option>
+                        <option value="ESP35">ESP35</option>
+                        <option value="FRA40">FRA40</option>
+                        <option value="GER30">GER30</option>
+                        <option value="HKG33">HKG33</option>
+                        <option value="ITA40">ITA40</option>
+                        <option value="JPN225">JPN225</option>
+                        <option value="NAS100">NAS100</option>
+                        <option value="SPX500">SPX500</option>
+                        <option value="SUI30">SUI30</option>
+                        <option value="UK100">UK100</option>
+                        <option value="US30">US30</option>
+                        <option value="UKOil">UKOil</option>
+                        <option value="USOil">USOil</option>
+                        <option value="XPDUSD">XPDUSD</option>
+                        <option value="XPTUSD">XPTUSD</option>
+                        <option value="Bund">Bund</option>
+                        <option value="NGAS">NGAS</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="lastclose">Last Close</label>
+                    <input type="text" name="lastclose" id="lastclose" />
+                    <span id="lastCloseTime"></span>
+                </div>
+                <div>
+                    <label for="rsi2hour">RSI 2 HOUR</label>
+                    <input type="text" name="rsi2hour" id="rsi2hour" />
+                    <span id="rsi2hourTime"></span>
+                </div>
+                <div>
+                    <label for="rsi4hour">RSI 4 HOUR</label>
+                    <input type="text" name="rsi4hour" id="rsi4hour" />
+                    <span id="rsi4hourTime"></span>
+                </div>
+                <div>
+                    <label for="rsiday">RSI DAILY</label>
+                    <input type="text" name="rsiday" id="rsiday" />
+                    <span id="rsidayTime"></span>
+                </div>
+            </fieldset>
+        </form>
+        <div id="textualExplanation"></div>
+    </body>
+</html>
