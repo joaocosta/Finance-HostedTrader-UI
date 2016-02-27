@@ -44,7 +44,6 @@ sub lastclose :Local {
     my $db = Finance::HostedTrader::Datasource->new();
     my $cfg = $db->cfg;
     my $args = $c->request->query_params;
-    my %available_symbols = map { $_ => 1 } @{$cfg->symbols->all};
 
     my $symbols = (defined($args->{'s'}) ? [ split( ',', $args->{'s'}) ] : $cfg->symbols->natural);
     my $jsonp_callback = $args->{'jsoncallback'};
