@@ -23,7 +23,7 @@
                     USDCAD: ["CAD",10000,1],
                     USDCHF: ["CHF",10000,1],
                     USDJPY: ["JPY",100,1],
-                    XAGUSD: ["USD",200,1],
+                    XAGUSD: ["USD",100,1],
                     XAUUSD: ["USD",10,1],
                     Copper: ["USD",2000,1],
                     XPDUSD: ["USD",10,1],
@@ -151,14 +151,15 @@
                                 var $positionSize = parseInt($maxLoss * $ratio / ($entry - $exit), 10) / symbolCurrencyMap[ $('#instrument').val() ][2];
                                 $('#positionSize').val($positionSize);
                                 setTextExplanation($entry, $exit, $positionSize, $maxLoss);
+                                $('#sizePerPoint').val($maxLoss / ($entry-$exit) / symbolCurrencyMap[ $('#instrument').val() ][1] / $ratio  );
                             }
                         );
                     } else {
                         var $positionSize = parseInt($maxLoss / ($entry - $exit), 10);
                         $('#positionSize').val($positionSize);
                         setTextExplanation($entry, $exit, $positionSize, $maxLoss);
+                        $('#sizePerPoint').val($maxLoss / ($entry-$exit) / symbolCurrencyMap[ $('#instrument').val() ][1]  );
                     }
-                    $('#sizePerPoint').val($maxLoss / ($entry-$exit) / symbolCurrencyMap[ $('#instrument').val() ][1]  );
                 }
 
                 $('#getCurrentPrice').click();
