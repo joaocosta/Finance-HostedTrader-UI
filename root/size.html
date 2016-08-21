@@ -51,7 +51,7 @@
                         });
                 $('#getCurrentPrice').click(function() {
                     var symbol = $('#instrument').val();
-                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=5min&e=close&s="+symbol+"&jsoncallback=?",
+                    $.getJSON("//fxhistoricaldata.com/api/parse?t=5min&e=close&s="+symbol+"&jsoncallback=?",
                         function(data) {
                             $('#entry').val(data.ResultSet.Result[0]['item1']).change();
                             $('#currentPriceTime').text(data.ResultSet.Result[0]['item0']);
@@ -60,7 +60,7 @@
 
                 $('#getPreviousHigh').click(function() {
                     var symbol = $('#instrument').val();
-                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=hour&e=max(high,396)&s="+symbol+"&jsoncallback=?",
+                    $.getJSON("//fxhistoricaldata.com/api/parse?t=hour&e=max(high,396)&s="+symbol+"&jsoncallback=?",
                         function(data) {
                             $('#exit').val(data.ResultSet.Result[0]['item1']).change();
                         });
@@ -68,7 +68,7 @@
 
                 $('#getPreviousLow').click(function() {
                     var symbol = $('#instrument').val();
-                    $.getJSON("http://www.fxhistoricaldata.com/signal/parse?t=hour&e=min(low,396)&s="+symbol+"&jsoncallback=?",
+                    $.getJSON("//fxhistoricaldata.com/api/parse?t=hour&e=min(low,396)&s="+symbol+"&jsoncallback=?",
                         function(data) {
                             $('#exit').val(data.ResultSet.Result[0]['item1']).change();
                         });
@@ -112,7 +112,7 @@
 
                     var $ratioCurrency = getRatioCurrency();
                     if ($ratioCurrency) {
-                        $.getJSON("http://www.fxhistoricaldata.com/signal/lastclose?s="+$ratioCurrency+"&jsoncallback=?",
+                        $.getJSON("//fxhistoricaldata.com/api/lastclose?s="+$ratioCurrency+"&jsoncallback=?",
                             function(data) {
                                 var $ratio = data.ResultSet.Result[0]['item1'];
                                 var $maxLoss = parseInt($positionSize * ($entry - $exit) / $ratio, 10);
@@ -145,7 +145,7 @@
 
                     var $ratioCurrency = getRatioCurrency();
                     if ($ratioCurrency) {
-                        $.getJSON("http://www.fxhistoricaldata.com/signal/lastclose?s="+$ratioCurrency+"&jsoncallback=?",
+                        $.getJSON("//fxhistoricaldata.com/api/lastclose?s="+$ratioCurrency+"&jsoncallback=?",
                             function(data) {
                                 var $ratio = data.ResultSet.Result[0]['item1'];
                                 var $positionSize = parseInt($maxLoss * $ratio / ($entry - $exit), 10) / symbolCurrencyMap[ $('#instrument').val() ][2];
@@ -231,7 +231,6 @@
         </style>
     </head>
     <body>
-        <a href="summary.html">Summary</a>
         <a href="size.html">Position Size</a>
         <form>
             <fieldset><legend>Position Size</legend>
