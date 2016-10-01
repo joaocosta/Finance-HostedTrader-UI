@@ -51,26 +51,26 @@
                         });
                 $('#getCurrentPrice').click(function() {
                     var symbol = $('#instrument').val();
-                    $.getJSON("//fxhistoricaldata.com/api/parse?t=5min&e=close&s="+symbol+"&jsoncallback=?",
+                    $.getJSON("//fxhistoricaldata.com/api/indicator?t=5min&e=close&s="+symbol+"&jsoncallback=?",
                         function(data) {
-                            $('#entry').val(data[symbol][0][1]).change();
+                            $('#entry').val(data[symbol][data][0][1]).change();
                             $('#currentPriceTime').text(data[symbol][0][0]);
                         });
                     });
 
                 $('#getPreviousHigh').click(function() {
                     var symbol = $('#instrument').val();
-                    $.getJSON("//fxhistoricaldata.com/api/parse?t=hour&e=max(high,396)&s="+symbol+"&jsoncallback=?",
+                    $.getJSON("//fxhistoricaldata.com/api/indicator?t=hour&e=max(high,396)&s="+symbol+"&jsoncallback=?",
                         function(data) {
-                            $('#exit').val(data[symbol][0][1]).change();
+                            $('#exit').val(data[symbol][data][0][1]).change();
                         });
                     });
 
                 $('#getPreviousLow').click(function() {
                     var symbol = $('#instrument').val();
-                    $.getJSON("//fxhistoricaldata.com/api/parse?t=hour&e=min(low,396)&s="+symbol+"&jsoncallback=?",
+                    $.getJSON("//fxhistoricaldata.com/api/indicator?t=hour&e=min(low,396)&s="+symbol+"&jsoncallback=?",
                         function(data) {
-                            $('#exit').val(data[symbol][0][1]).change();
+                            $('#exit').val(data[symbol][data][0][1]).change();
                         });
                     });
 
