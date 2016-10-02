@@ -53,8 +53,8 @@
                     var symbol = $('#instrument').val();
                     $.getJSON("//fxhistoricaldata.com/api/indicator?t=5min&e=close&s="+symbol+"&jsoncallback=?",
                         function(data) {
-                            $('#entry').val(data[symbol][data][0][1]).change();
-                            $('#currentPriceTime').text(data[symbol][0][0]);
+                            $('#entry').val(data['results'][symbol]['data'][0][1]).change();
+                            $('#currentPriceTime').text(data['results'][symbol]['data'][0][0]);
                         });
                     });
 
@@ -62,7 +62,7 @@
                     var symbol = $('#instrument').val();
                     $.getJSON("//fxhistoricaldata.com/api/indicator?t=hour&e=max(high,396)&s="+symbol+"&jsoncallback=?",
                         function(data) {
-                            $('#exit').val(data[symbol][data][0][1]).change();
+                            $('#exit').val(data['results'][symbol]['data'][0][1]).change();
                         });
                     });
 
@@ -70,7 +70,7 @@
                     var symbol = $('#instrument').val();
                     $.getJSON("//fxhistoricaldata.com/api/indicator?t=hour&e=min(low,396)&s="+symbol+"&jsoncallback=?",
                         function(data) {
-                            $('#exit').val(data[symbol][data][0][1]).change();
+                            $('#exit').val(data['results'][symbol]['data'][0][1]).change();
                         });
                     });
 
