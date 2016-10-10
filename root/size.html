@@ -51,7 +51,7 @@
                         });
                 $('#getCurrentPrice').click(function() {
                     var symbol = $('#instrument').val();
-                    $.getJSON("//api.fxhistoricaldata.com/v1/indicator?t=5min&e=close&s="+symbol+"&jsoncallback=?",
+                    $.getJSON("//api.fxhistoricaldata.com/v1/indicators?t=5min&e=close&s="+symbol+"&jsoncallback=?",
                         function(data) {
                             $('#entry').val(data['results'][symbol]['data'][0][1]).change();
                             $('#currentPriceTime').text(data['results'][symbol]['data'][0][0]);
@@ -60,7 +60,7 @@
 
                 $('#getPreviousHigh').click(function() {
                     var symbol = $('#instrument').val();
-                    $.getJSON("//api.fxhistoricaldata.com/v1/indicator?t=hour&e=max(high,396)&s="+symbol+"&jsoncallback=?",
+                    $.getJSON("//api.fxhistoricaldata.com/v1/indicators?t=hour&e=max(high,396)&s="+symbol+"&jsoncallback=?",
                         function(data) {
                             $('#exit').val(data['results'][symbol]['data'][0][1]).change();
                         });
@@ -68,7 +68,7 @@
 
                 $('#getPreviousLow').click(function() {
                     var symbol = $('#instrument').val();
-                    $.getJSON("//api.fxhistoricaldata.com/v1/indicator?t=hour&e=min(low,396)&s="+symbol+"&jsoncallback=?",
+                    $.getJSON("//api.fxhistoricaldata.com/v1/indicators?t=hour&e=min(low,396)&s="+symbol+"&jsoncallback=?",
                         function(data) {
                             $('#exit').val(data['results'][symbol]['data'][0][1]).change();
                         });
